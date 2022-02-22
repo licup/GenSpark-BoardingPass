@@ -9,8 +9,5 @@
         <module name="BoardingPass" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="BoardingPass" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
