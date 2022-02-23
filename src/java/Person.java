@@ -1,7 +1,9 @@
 public class Person {
-    String name;
-    String email;
-    String phoneNum;
+    private String name;
+    private String email;
+    private String phoneNum;
+    private Character gender;
+    private int age;
 
     //Default Constructor
     public Person(){
@@ -14,6 +16,17 @@ public class Person {
         this.phoneNum = phoneNum;
         this.gender = gender;
         this.age = age;
+    }
+
+    //Methods
+    public Boolean isGirl(){
+        return this.gender.equals('F');
+    }
+    public Boolean isYoung(){
+        return this.age <= 12;
+    }
+    public Boolean isOld(){
+        return this.age >= 60;
     }
 
     //Getter and Setter
@@ -57,6 +70,14 @@ public class Person {
         this.age = age;
     }
 
-    Character gender;
-    int age;
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                '}';
+    }
 }
