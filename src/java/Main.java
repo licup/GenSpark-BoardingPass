@@ -55,7 +55,8 @@ public class Main {
         long milli = (long)Math.floor((Math.random()*(86399999 - 59999))+ 59999);
         Time time = new Time(milli);
         String eta = time.toString().substring(0,5);
+        double price = 0.0;
 
-        return new Pass(passNum, date, origin, destination, eta, departure);
+        return new Pass(passNum, date, origin, destination, eta, departure,);
     }
 }

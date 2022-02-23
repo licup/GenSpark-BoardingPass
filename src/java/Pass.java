@@ -5,6 +5,7 @@ public class Pass {
     private String destination;
     private String eta;
     private String departure;
+    private double price;
 
     //Default Constructor
     public Pass(){
@@ -12,7 +13,7 @@ public class Pass {
     }
 
     //Overloaded Constructor
-    public Pass(int passNum, String date, String origin, String destination, String eta, String departure) {
+    public Pass(int passNum, String date, String origin, String destination, String eta, String departure, double price) {
         this.passNum = passNum;
         this.date = date;
         this.origin = origin;
@@ -68,6 +69,14 @@ public class Pass {
 
     public void setDeparture(String departure) {
         this.departure = departure;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override
