@@ -1,4 +1,6 @@
-public class Pass {
+import java.io.Serializable;
+
+public class Pass implements Serializable {
     private int passNum;
     private String date;
     private String origin;
@@ -20,6 +22,7 @@ public class Pass {
         this.destination = destination;
         this.eta = eta;
         this.departure = departure;
+        this.price = price;
     }
 
     //Getter and Setter
@@ -88,6 +91,7 @@ public class Pass {
                 ", destination='" + destination + '\'' +
                 ", eta='" + eta + '\'' +
                 ", departure='" + departure + '\'' +
+                ", price='" + price + "\'" +
                 '}';
     }
 }
