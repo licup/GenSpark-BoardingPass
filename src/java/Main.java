@@ -118,6 +118,8 @@ public class Main {
     public static void writeIntoFile(Person user, Pass pass){
         try {
             File file = new File("passenger_log.txt");
+            //If the file doesn't exist then it'll create a passenger_log.txt in the project
+            //If the file already exists, then it will append the info given by the user into the txt file
             if (file.createNewFile()) {
                 String dataLine = pass.getPassNum() + ", " + user.getName() + ", " + user.getAge() + ", " + user.getGender() + ", " + user.getEmail() + ", " + user.getPhoneNum()
                         + ", " + pass.getDate() + ", " + pass.getOrigin() + ", " + pass.getDestination() + ", " + pass.getDeparture() + ", " + pass.getEta() + ", " + pass.getPrice() + "\n";
