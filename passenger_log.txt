@@ -1,1 +1,9 @@
 214, oijoi, 33, F, jijo@dfij.com, 1231231234, 12/12/1999, ny, mi, 12:32, 07:10, 719.25
+308, Lihuang Zheng, 33, m, soup233@soup.com, 8122040590, 01/31/2004, NY, IN, 12:23, 15:49, 423.0
+57, lihuang, 12, m, super@super.com, 1231233456, 01/13/1223, IN, Ny, 12:12, 20:12, 93.0
+272, lihuang, 34, f, Super@super.super, 1231231234, 12/12/1212, china, japan, 02:34, 22:44, 1047.0
+625, lihuang, 12, f, lihau@didi.com, 2347982345, 34/34/1235, ny, dc, 34:34, 05:32, 498.5
+696, lihuag, 123, m, asdfoij@dofijf.com, 1231231234, 12/12/1244, china, japan, 12:12, 03:44, 171.6
+12, lihau, 12, F, jsodij@doijf.com, 1231231234, 12/12/3431, china, japan, 12:12, 09:40, 129.75
+520352772, lihuang, 12, F, dsofij@doijf.cm, 8121221234, 12/12/2431, china, cn, 12:12, 19:05, 217.5
+274071367, lihuang lihuang, 12, F, oij@did.com, 1831233434, 12/12/1222, china, shanhai, 12:12, 08:49, 270.75
