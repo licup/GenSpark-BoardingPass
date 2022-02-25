@@ -9,6 +9,10 @@ public class Main {
 
     // ************************* MAIN ************************* //
     public static void main(String[] args) {
+        System.out.println("\n" + "Welcome to Boarding Pass Signup Portal." + "\n" + "\n"
+                            + "Please provide us with your information." + "\n"
+                            + "Lastly we will show you the result that you looking for." + "\n"
+        );
         Person user = userInfo();
         Pass passPort = passInfo(user);
         writeIntoFile(user, passPort);
@@ -42,7 +46,8 @@ public class Main {
         gender = input.nextLine().charAt(0);
         if(!gender.toString().equalsIgnoreCase("F") && !gender.toString().equalsIgnoreCase("M") && !gender.toString().equalsIgnoreCase("O")){
             while(!gender.toString().equalsIgnoreCase("F") && !gender.toString().equalsIgnoreCase("M") && !gender.toString().equalsIgnoreCase("O")){
-                System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say) ");
+                System.out.println("Please enter either M, F, or O!");
+                System.out.print("Enter your gender (M(Male), F(Female), O(Prefer Not to Say)): ");
                 gender = input.nextLine().charAt(0);
             }
         }
@@ -110,8 +115,9 @@ public class Main {
             }
         }
 
-        String areaFormat = "^[a-zA-Z]*$";
+
         // Take in user's input for where user will be leaving from.
+        String areaFormat = "^[a-zA-Z]*$";
         System.out.print("Where will you be leaving from: ");
         origin = input.nextLine();
         if(!origin.matches(areaFormat)){
@@ -242,14 +248,18 @@ public class Main {
     }
 
     // ************************* DATE CHECK METHOD ************************* //
-    public static Boolean dateCheck(String date){
+    public static Boolean dateCheck(String date) {
         List<String> dateSplit = Arrays.asList(date.split("/"));
-        if(Integer.parseInt(dateSplit.get(0)) > 12 || Integer.parseInt(dateSplit.get(0)) < 1){
-            return false;
-        }else if(Integer.parseInt(dateSplit.get(1)) > 31 || Integer.parseInt(dateSplit.get(1)) < 1 ||
-                (Integer.parseInt(dateSplit.get(0)) == 2 && Integer.parseInt(dateSplit.get(1)) > 29)){
+
+        // 0 specify the months, 1 specify the days, 2 specify the year.
+        if(
+            (Integer.parseInt(dateSplit.get(0)) < 1 || Integer.parseInt(dateSplit.get(0)) > 12)
+            || (Integer.parseInt(dateSplit.get(1)) < 1 || Integer.parseInt(dateSplit.get(1)) > 31)
+            || (Integer.parseInt(dateSplit.get(0)) == 2 && Integer.parseInt(dateSplit.get(1)) > 29)
+        ) {
             return false;
         }
+
         return true;
     }
 }
