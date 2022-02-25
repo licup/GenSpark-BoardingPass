@@ -42,8 +42,7 @@ public class Main {
         gender = input.nextLine().charAt(0);
         if(!gender.toString().equalsIgnoreCase("F") && !gender.toString().equalsIgnoreCase("M") && !gender.toString().equalsIgnoreCase("O")){
             while(!gender.toString().equalsIgnoreCase("F") && !gender.toString().equalsIgnoreCase("M") && !gender.toString().equalsIgnoreCase("O")){
-                System.out.println("Please enter either M, F, or O!");
-                System.out.print("Enter your gender (M(Male), F(Female), O(Prefer Not to Say)): ");
+                System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say) ");
                 gender = input.nextLine().charAt(0);
             }
         }
@@ -60,7 +59,7 @@ public class Main {
                 email = input.nextLine();
             }
         }
-
+      
         // Take in user's phone number.
         String phoneNumFormat = "[0-9]{10}";
         System.out.print("Enter your phone number: ");
@@ -102,23 +101,37 @@ public class Main {
         String dateFormat = "[0-9]{2}+/+[0-9]{2}+/+[0-9]{4}";
         System.out.print("Enter the date you want your flight to be (MM/DD/YYYY): ");
         date = input.nextLine();
-        if(!date.matches(dateFormat)) {
-            while (!date.matches(dateFormat)) {
-                System.out.println("You entered the wrong format!\n" +
+        if(!date.matches(dateFormat) || !dateCheck(date)) {
+            while (!date.matches(dateFormat) || !dateCheck(date)) {
+                System.out.println("You entered an Invalid Date!\n" +
                         "Example: 01/01/2022");
                 System.out.print("Enter the date you want your flight to be (MM/DD/YYYY): ");
                 date = input.nextLine();
             }
         }
 
+        String areaFormat = "^[a-zA-Z]*$";
         // Take in user's input for where user will be leaving from.
         System.out.print("Where will you be leaving from: ");
         origin = input.nextLine();
-
+        if(!origin.matches(areaFormat)){
+            while(!origin.matches(areaFormat)){
+                System.out.println("Please enter a valid destination!\nExample: Chicago");
+                System.out.print("Where will you be leaving from: ");
+                origin = input.nextLine();
+            }
+        }
+        
         // Take in user's input for where user want to fly to.
         System.out.print("Where will you want to fly to: ");
         destination = input.nextLine();
-
+        if(!destination.matches(areaFormat)){
+            while(!destination.matches(areaFormat)){
+                System.out.println("Please enter a valid destination!\nExample: Chicago");
+                System.out.print("Where will you be leaving from: ");
+                destination = input.nextLine();
+            }
+        }
 
         // Take in user's input for time.
         String timeFormat = "[0-9]{2}+:+[0-9]{2}";
@@ -164,23 +177,22 @@ public class Main {
     // ************************* WRITE TO FILE SECTION ************************* //
     public static void writeIntoFile(Person user, Pass pass) {
         try {
-            File files = new File("passenger_log.txt");
-
-            if(files.createNewFile()) {
+            File file = new File("passenger_log.txt");
+            //If the file doesn't exist then it'll create a passenger_log.txt in the project
+            //If the file already exists, then it will append the info given by the user into the txt file
+            if (file.createNewFile()) {
                 String dataLine = pass.getPassNum() + ", " + user.getName() + ", " + user.getAge() + ", " + user.getGender() + ", " + user.getEmail() + ", " + user.getPhoneNum()
                         + ", " + pass.getDate() + ", " + pass.getOrigin() + ", " + pass.getDestination() + ", " + pass.getDeparture() + ", " + pass.getEta() + ", " + pass.getPrice() + "\n";
                 Files.write(Paths.get("passenger_log.txt"), dataLine.getBytes(), StandardOpenOption.APPEND);
-            } else {
+            }else{
                 String dataLine = pass.getPassNum() + ", " + user.getName() + ", " + user.getAge() + ", " + user.getGender() + ", " + user.getEmail() + ", " + user.getPhoneNum()
                         + ", " + pass.getDate() + ", " + pass.getOrigin() + ", " + pass.getDestination() + ", " + pass.getDeparture() + ", " + pass.getEta() + ", " + pass.getPrice() + "\n";
                 Files.write(Paths.get("passenger_log.txt"), dataLine.getBytes(), StandardOpenOption.APPEND);
             }
-
         } catch(IOException e) {
             System.out.println(e);
         }
     }
-
 
     // ************************* CHECK IF UNIQUE PASS METHOD ************************* //
     public static Boolean isUniqueNum(int num){
@@ -214,12 +226,12 @@ public class Main {
                 Integer numCheck = Integer.parseInt(line.get(0));
 
                 if(numCheck.equals(passNum)) {
-                    return "◤ BoardingPass #: " + line.get(0) + "\n" +
-                            "◤ Name:" + line.get(1) + " ▎Age:" + line.get(2) + " ▎Gender:" +
-                            line.get(3) + " ▎Email:" + line.get(4) + " ▎Phone Number:" + line.get(5) + "\n" +
-                            "◤ Date:" + line.get(6) + " ▎Origin:" + line.get(7) + " ▎Destination:" + line.get(8)
-                            + " ▎Estimated Time of Arrival(ETA):" + line.get(9) + " ▎Time of Departure:" + line.get(10)
-                            + "\n" + "◤ Total Price:" + line.get(11);
+                    return "BoardingPass Number:" + line.get(0) + "\n" +
+                            "Name:" + line.get(1) + " Age:" + line.get(2) + " Gender:" +
+                            line.get(3) + " Email:" + line.get(4) + " Phone Number:" + line.get(5) +
+                            "\nDate:" + line.get(6) + " Origin:" + line.get(7) + " Destination:" + line.get(8)
+                            + " Estimated Time of Arrival(ETA):" + line.get(9) + "\nTime of Departure:" + line.get(10)
+                            + "\nTotal Price: $" + String.format("%.2f", Double.parseDouble(line.get(11)));
                 }
             }
         } catch(IOException e) {
@@ -227,5 +239,16 @@ public class Main {
         }
 
         return null;
+    }
+
+    public static Boolean dateCheck(String date){
+        List<String> dateSplit = Arrays.asList(date.split("/"));
+        if(Integer.parseInt(dateSplit.get(0)) > 12 || Integer.parseInt(dateSplit.get(0)) < 1){
+            return false;
+        }else if(Integer.parseInt(dateSplit.get(1)) > 31 || Integer.parseInt(dateSplit.get(1)) < 1 ||
+                (Integer.parseInt(dateSplit.get(0)) == 2 && Integer.parseInt(dateSplit.get(1)) > 29)){
+            return false;
+        }
+        return true;
     }
 }
