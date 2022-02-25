@@ -2,12 +2,12 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.sql.*;
 
 public class Main {
 
+    // ************************* MAIN ************************* //
     public static void main(String[] args) {
         Person user = userInfo();
         Pass passPort = passInfo(user);
@@ -15,35 +15,52 @@ public class Main {
         System.out.println(output(passPort.getPassNum()));
     }
 
-    public static Person userInfo(){
+
+    // ************************* USER INFO SECTION ************************* //
+    public static Person userInfo() {
+        // User info Init.
         String name; String email; String phoneNum; Character gender; int age;
-        //Input
+
+        // Scanner Class to catch input from user.
         Scanner input = new Scanner(System.in);
 
-        System.out.print("Enter your name: ");
+        // Take in user's full name.
+        String nameFormat = "^[a-zA-Z]{4,}(?: [a-zA-Z]+)?(?: [a-zA-Z]+)?$";
+        System.out.print("Enter your first and last name: ");
         name = input.nextLine();
+        if(!name.matches(nameFormat)) {
+            while (!name.matches(nameFormat)) {
+                System.out.println("You entered the wrong format!\n" +
+                        "Example: Leo Leo");
+                System.out.print("Enter your full and last name: ");
+                name = input.nextLine();
+            }
+        }
 
-        System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say) ");
+        // Take in user's gender.
+        System.out.print("Enter your gender (M(Male), F(Female), O(Prefer Not to Say)): ");
         gender = input.nextLine().charAt(0);
-        // Make sure they follow the guidelines
-        if(!gender.toString().toUpperCase().equals("F") && !gender.toString().toUpperCase().equals("M") && !gender.toString().toUpperCase().equals("O")){
-            while(!gender.toString().toUpperCase().equals("F") && !gender.toString().toUpperCase().equals("M") && !gender.toString().toUpperCase().equals("O")){
-                System.out.println("Please enter either M, F, or O!");
+        if(!gender.toString().equalsIgnoreCase("F") && !gender.toString().equalsIgnoreCase("M") && !gender.toString().equalsIgnoreCase("O")){
+            while(!gender.toString().equalsIgnoreCase("F") && !gender.toString().equalsIgnoreCase("M") && !gender.toString().equalsIgnoreCase("O")){
                 System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say) ");
                 gender = input.nextLine().charAt(0);
             }
         }
-        //grabbed email regex from https://blog.lkatney.com/2015/02/28/regex-to-check-email-address-username-format-apex/
-        String emailFormat = "([a-zA-Z0-9_\\-\\\\.]+)@((\\[a-z]{1,3}\\.[a-z]{1,3}\\.[a-z]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})";
+
+        // Take in user's email.
+        String emailFormat = "^(.+)@(.+)$";
         System.out.print("Enter your email: ");
         email = input.nextLine();
-        if(!email.matches(emailFormat)){
-            while(!email.matches(emailFormat)){
-                System.out.println("Please Enter a valid email!\nExample: user1@example.com");
+        if(!email.matches(emailFormat)) {
+            while (!email.matches(emailFormat)) {
+                System.out.println("You entered the wrong format!\n" +
+                        "Example: abc@abc.abc");
                 System.out.print("Enter your email: ");
                 email = input.nextLine();
             }
         }
+      
+        // Take in user's phone number.
         String phoneNumFormat = "[0-9]{10}";
         System.out.print("Enter your phone number: ");
         phoneNum = input.nextLine();
@@ -51,39 +68,50 @@ public class Main {
             while (!phoneNum.matches(phoneNumFormat)) {
                 System.out.println("You entered the wrong format!\n" +
                         "Example: 1234567890");
-                System.out.print("Enter your phone number:  ");
+                System.out.print("Enter your phone number: ");
                 phoneNum = input.nextLine();
             }
         }
+
+        // Take in user's age.
         System.out.print("Enter your age: ");
         age = input.nextInt();
 
-        return new Person(name,email,phoneNum,gender,age);
+        // Last, generate a person details with user's inputs from above.
+        return new Person(name, email, phoneNum, gender, age);
     }
 
-    public static Pass passInfo(Person person){
+
+    // ************************* USER INFO SECTION ************************* //
+    public static Pass passInfo(Person person) {
+        // User pass init.
         String date; String origin; String destination; String departure;
-        int passNum = (int)Math.floor((Math.random()*(1000 - 1)) + 1);
+
+        // User pass generator.
+        int passNum = (int)Math.floor((Math.random()*(999999999 - 100000000)) + 1);
         //If the pass number already exists in the passenger_log.txt, generates a new number
         if(!isUniqueNum(passNum)){
-            passNum = (int)Math.floor((Math.random()*(1000 - 1)) + 1);
+            passNum = (int)Math.floor((Math.random()*(999999999 - 100000000)) + 1);
         }
 
+        // Scanner class to catch user input.
         Scanner input = new Scanner(System.in);
 
+        // Take in user's input for date.
         String dateFormat = "[0-9]{2}+/+[0-9]{2}+/+[0-9]{4}";
-        System.out.print("Enter the date you want your flight to be (MM/DD/YYYY) : ");
+        System.out.print("Enter the date you want your flight to be (MM/DD/YYYY): ");
         date = input.nextLine();
         if(!date.matches(dateFormat) || !dateCheck(date)) {
             while (!date.matches(dateFormat) || !dateCheck(date)) {
                 System.out.println("You entered an Invalid Date!\n" +
                         "Example: 01/01/2022");
-                System.out.print("Enter the date you want your flight to be (MM/DD/YYYY) : ");
+                System.out.print("Enter the date you want your flight to be (MM/DD/YYYY): ");
                 date = input.nextLine();
             }
         }
 
         String areaFormat = "^[a-zA-Z]*$";
+        // Take in user's input for where user will be leaving from.
         System.out.print("Where will you be leaving from: ");
         origin = input.nextLine();
         if(!origin.matches(areaFormat)){
@@ -93,7 +121,8 @@ public class Main {
                 origin = input.nextLine();
             }
         }
-
+        
+        // Take in user's input for where user want to fly to.
         System.out.print("Where will you want to fly to: ");
         destination = input.nextLine();
         if(!destination.matches(areaFormat)){
@@ -103,6 +132,8 @@ public class Main {
                 destination = input.nextLine();
             }
         }
+
+        // Take in user's input for time.
         String timeFormat = "[0-9]{2}+:+[0-9]{2}";
         System.out.print("What time do you want to leave (Military Time): ");
         departure = input.nextLine(); // Make sure that they follow a specific format HH:MM (Military time)
@@ -110,35 +141,41 @@ public class Main {
             while (!departure.matches(timeFormat)) {
                 System.out.println("You entered the wrong format!\n" +
                         "Example: 03:30");
-                System.out.print("What time do you want to leave (Military Time) : ");
+                System.out.print("What time do you want to leave (Military Time): ");
                 departure = input.nextLine();
             }
         }
+
         //Creating ETA by using the Time class
         //Using a random range from 11:59PM (in milliseconds) to 12:01 AM (in milliseconds)
         long milli = (long)Math.floor((Math.random()*(86399999 - 59999))+ 59999);
         Time time = new Time(milli);
         String eta = time.toString().substring(0,5);
 
+        // Generate random price within 100 to 1000 for the user.
         double randomPrice = Math.floor(((100.0 + Math.random( ) * 1000.0) * 10)/10);
         System.out.println(randomPrice);
         //Reduces price based on if the person:
         //Age >= 60
         //Age <= 12
         //Gender = Female
-        if(person.isOld()){
+        if(person.isOld()) {
             randomPrice -= randomPrice*.6;
-        }else if(person.isGirl()){
+        } else if(person.isGirl()) {
             randomPrice -= randomPrice*.25;
-        }else if(person.isYoung()){
+        } else if(person.isYoung()) {
             randomPrice -= randomPrice*.5;
         }
-        System.out.println(randomPrice);
+        System.out.println("This is the price of the trip: "+ randomPrice);
         String finalPrice = String.format("%.2f", randomPrice);
+
+        // Last, generate pass info from the user's input from above.
         return new Pass(passNum, date, origin, destination, eta, departure, Double.parseDouble(finalPrice));
     }
 
-    public static void writeIntoFile(Person user, Pass pass){
+
+    // ************************* WRITE TO FILE SECTION ************************* //
+    public static void writeIntoFile(Person user, Pass pass) {
         try {
             File file = new File("passenger_log.txt");
             //If the file doesn't exist then it'll create a passenger_log.txt in the project
@@ -152,35 +189,42 @@ public class Main {
                         + ", " + pass.getDate() + ", " + pass.getOrigin() + ", " + pass.getDestination() + ", " + pass.getDeparture() + ", " + pass.getEta() + ", " + pass.getPrice() + "\n";
                 Files.write(Paths.get("passenger_log.txt"), dataLine.getBytes(), StandardOpenOption.APPEND);
             }
-        }catch(IOException e){
+        } catch(IOException e) {
             System.out.println(e);
         }
     }
 
+    // ************************* CHECK IF UNIQUE PASS METHOD ************************* //
     public static Boolean isUniqueNum(int num){
-        try{
+        try {
             File file = new File("passenger_log.txt");
             Scanner scan = new Scanner(file);
+
             while(scan.hasNextLine()){
                 List<String> line = Arrays.asList(scan.nextLine().split(","));
                 Integer number = Integer.parseInt(line.get(0));
+
                 if(number.equals(num)){
                     return false;
                 }
             }
-        }catch(IOException e){
+        } catch(IOException e) {
             System.out.println(e);
         }
+
         return true;
     }
 
-    public static String output(int passNum){
-        try{
+    // ************************* WRITE TO FILE METHOD ************************* //
+    public static String output(int passNum) {
+        try {
             File file = new File("passenger_log.txt");
             Scanner scan = new Scanner(file);
-            while(scan.hasNextLine()){
+
+            while(scan.hasNextLine()) {
                 List<String> line = Arrays.asList(scan.nextLine().split(","));
                 Integer numCheck = Integer.parseInt(line.get(0));
+
                 if(numCheck.equals(passNum)) {
                     return "BoardingPass Number:" + line.get(0) + "\n" +
                             "Name:" + line.get(1) + " Age:" + line.get(2) + " Gender:" +
@@ -190,9 +234,10 @@ public class Main {
                             + "\nTotal Price: $" + String.format("%.2f", Double.parseDouble(line.get(11)));
                 }
             }
-        }catch(IOException e){
+        } catch(IOException e) {
             System.out.println(e);
         }
+
         return null;
     }
 
