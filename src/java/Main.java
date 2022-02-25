@@ -7,6 +7,7 @@ import java.util.*;
 import java.sql.*;
 
 public class Main {
+
     public static void main(String[] args) {
         Person user = userInfo();
         Pass passPort = passInfo(user);
@@ -22,20 +23,27 @@ public class Main {
         System.out.print("Enter your name: ");
         name = input.nextLine();
 
-        System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say)");
+        System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say) ");
         gender = input.nextLine().charAt(0);
         // Make sure they follow the guidelines
         if(!gender.toString().toUpperCase().equals("F") && !gender.toString().toUpperCase().equals("M") && !gender.toString().toUpperCase().equals("O")){
             while(!gender.toString().toUpperCase().equals("F") && !gender.toString().toUpperCase().equals("M") && !gender.toString().toUpperCase().equals("O")){
                 System.out.println("Please enter either M, F, or O!");
-                System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say)");
+                System.out.print("Enter your gender: M(Male), F(Female), O(Prefer Not to Say) ");
                 gender = input.nextLine().charAt(0);
             }
         }
-
+        //grabbed email regex from https://blog.lkatney.com/2015/02/28/regex-to-check-email-address-username-format-apex/
+        String emailFormat = "([a-zA-Z0-9_\\-\\\\.]+)@((\\[a-z]{1,3}\\.[a-z]{1,3}\\.[a-z]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})";
         System.out.print("Enter your email: ");
         email = input.nextLine();
-
+        if(!email.matches(emailFormat)){
+            while(!email.matches(emailFormat)){
+                System.out.println("Please Enter a valid email!\nExample: user1@example.com");
+                System.out.print("Enter your email: ");
+                email = input.nextLine();
+            }
+        }
         String phoneNumFormat = "[0-9]{10}";
         System.out.print("Enter your phone number: ");
         phoneNum = input.nextLine();
@@ -66,20 +74,35 @@ public class Main {
         String dateFormat = "[0-9]{2}+/+[0-9]{2}+/+[0-9]{4}";
         System.out.print("Enter the date you want your flight to be (MM/DD/YYYY) : ");
         date = input.nextLine();
-        if(!date.matches(dateFormat)) {
-            while (!date.matches(dateFormat)) {
-                System.out.println("You entered the wrong format!\n" +
+        if(!date.matches(dateFormat) || !dateCheck(date)) {
+            while (!date.matches(dateFormat) || !dateCheck(date)) {
+                System.out.println("You entered an Invalid Date!\n" +
                         "Example: 01/01/2022");
                 System.out.print("Enter the date you want your flight to be (MM/DD/YYYY) : ");
                 date = input.nextLine();
             }
         }
+
+        String areaFormat = "^[a-zA-Z]*$";
         System.out.print("Where will you be leaving from: ");
         origin = input.nextLine();
+        if(!origin.matches(areaFormat)){
+            while(!origin.matches(areaFormat)){
+                System.out.println("Please enter a valid destination!\nExample: Chicago");
+                System.out.print("Where will you be leaving from: ");
+                origin = input.nextLine();
+            }
+        }
 
-        System.out.print("Where will you want to fly to:");
+        System.out.print("Where will you want to fly to: ");
         destination = input.nextLine();
-
+        if(!destination.matches(areaFormat)){
+            while(!destination.matches(areaFormat)){
+                System.out.println("Please enter a valid destination!\nExample: Chicago");
+                System.out.print("Where will you be leaving from: ");
+                destination = input.nextLine();
+            }
+        }
         String timeFormat = "[0-9]{2}+:+[0-9]{2}";
         System.out.print("What time do you want to leave (Military Time): ");
         departure = input.nextLine(); // Make sure that they follow a specific format HH:MM (Military time)
@@ -159,17 +182,28 @@ public class Main {
                 List<String> line = Arrays.asList(scan.nextLine().split(","));
                 Integer numCheck = Integer.parseInt(line.get(0));
                 if(numCheck.equals(passNum)) {
-                    return "BoardingPass Number: " + line.get(0) + "\n" +
-                            "Name: " + line.get(1) + "Age: " + line.get(2) + "Gender: " +
-                            line.get(3) + "Email: " + line.get(4) + "Phone Number: " + line.get(5) +
-                            "Date: " + line.get(6) + "Origin: " + line.get(7) + "Destination: " + line.get(8)
-                            + "Estimated Time of Arrival(ETA): " + line.get(9) + "Time of Departure: " + line.get(10)
-                            + "Total Price: " + line.get(11);
+                    return "BoardingPass Number:" + line.get(0) + "\n" +
+                            "Name:" + line.get(1) + " Age:" + line.get(2) + " Gender:" +
+                            line.get(3) + " Email:" + line.get(4) + " Phone Number:" + line.get(5) +
+                            "\nDate:" + line.get(6) + " Origin:" + line.get(7) + " Destination:" + line.get(8)
+                            + " Estimated Time of Arrival(ETA):" + line.get(9) + "\nTime of Departure:" + line.get(10)
+                            + "\nTotal Price: $" + String.format("%.2f", Double.parseDouble(line.get(11)));
                 }
             }
         }catch(IOException e){
             System.out.println(e);
         }
         return null;
+    }
+
+    public static Boolean dateCheck(String date){
+        List<String> dateSplit = Arrays.asList(date.split("/"));
+        if(Integer.parseInt(dateSplit.get(0)) > 12 || Integer.parseInt(dateSplit.get(0)) < 1){
+            return false;
+        }else if(Integer.parseInt(dateSplit.get(1)) > 31 || Integer.parseInt(dateSplit.get(1)) < 1 ||
+                (Integer.parseInt(dateSplit.get(0)) == 2 && Integer.parseInt(dateSplit.get(1)) > 29)){
+            return false;
+        }
+        return true;
     }
 }
