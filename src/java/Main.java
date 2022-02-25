@@ -32,7 +32,7 @@ public class Main {
             while (!name.matches(nameFormat)) {
                 System.out.println("You entered the wrong format!\n" +
                         "Example: Leo Leo");
-                System.out.print("Enter your full and last name: ");
+                System.out.print("Enter your first and last name: ");
                 name = input.nextLine();
             }
         }
@@ -241,6 +241,7 @@ public class Main {
         return null;
     }
 
+    // ************************* DATE CHECK METHOD ************************* //
     public static Boolean dateCheck(String date){
         List<String> dateSplit = Arrays.asList(date.split("/"));
         if(Integer.parseInt(dateSplit.get(0)) > 12 || Integer.parseInt(dateSplit.get(0)) < 1){
